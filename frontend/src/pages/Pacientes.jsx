@@ -22,7 +22,7 @@ export default function Pacientes() {
     setLoading(true);
     setErro("");
     try {
-      const res = await api.get("/api/pacientes"); // Supondo que esta seja a rota correta
+      const res = await api.get("/pacientes");
       setPacientes(res.data);
     } catch (err) {
       setErro("Erro ao carregar pacientes.");
@@ -44,7 +44,7 @@ export default function Pacientes() {
     }
 
     try {
-      await api.post("/api/pacientes", {
+      await api.post("/pacientes", {
         nome,
         email,
         telefone,

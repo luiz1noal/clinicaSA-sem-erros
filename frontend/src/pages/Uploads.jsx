@@ -31,12 +31,13 @@ export default function Uploads() {
       const res = await api.get("/arquivos", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("Arquivos recebidos:", res.data);
       setArquivos(res.data);
     } catch (error) {
       console.error("Erro ao listar arquivos:", error);
     }
   }
-
+  
   async function enviar(e) {
     e.preventDefault();
     const token = localStorage.getItem("token");
@@ -46,7 +47,7 @@ export default function Uploads() {
     }
 
     const formData = new FormData();
-    formData.append("arquivo", arquivo);
+    formData.append("arquivo", arquivo); // aqui tem que bater com o name do input
     formData.append("paciente_id", pacienteId);
 
     try {
@@ -88,6 +89,7 @@ export default function Uploads() {
 
           <input
             type="file"
+            name="arquivo"
             className="border p-2 rounded"
             onChange={(e) => setArquivo(e.target.files[0])}
             required
@@ -101,7 +103,7 @@ export default function Uploads() {
               <li key={a.id} className="py-2 border-b">
                 <a
                   className="text-blue-600 underline"
-                  href={`http://localhost:3000/${a.caminho}`}
+                  href={`http://localhost:5000/uploads/${a.nome}`}
                   target="_blank"
                   rel="noreferrer"
                 >

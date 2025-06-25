@@ -21,7 +21,7 @@ export default function Consultas() {
 
   async function listarPacientes() {
     try {
-      const res = await api.get("/api/pacientes");
+      const res = await api.get("/pacientes");
       setPacientes(res.data);
     } catch (err) {
       console.error("Erro ao listar pacientes:", err);
@@ -31,7 +31,7 @@ export default function Consultas() {
 
   async function listarMedicos() {
     try {
-      const res = await api.get("/api/medicos");
+      const res = await api.get("/medicos");
       setMedicos(res.data);
     } catch (err) {
       console.error("Erro ao listar médicos:", err);
@@ -41,7 +41,7 @@ export default function Consultas() {
 
   async function listarConsultas() {
     try {
-      const res = await api.get("/api/consultas");
+      const res = await api.get("/consultas");
       setConsultas(res.data);
     } catch (err) {
       console.error("Erro ao listar consultas:", err);
@@ -58,7 +58,7 @@ export default function Consultas() {
     }
 
     try {
-      await api.post("/api/consultas", {
+      await api.post("/consultas", {
         paciente_id: pacienteId,
         medico_id: medicoId,
         data_hora: dataHora,
