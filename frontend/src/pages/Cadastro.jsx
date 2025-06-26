@@ -7,18 +7,38 @@ export default function Cadastro() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [papel, setPapel] = useState('paciente'); // valor padrão
+  const [especialidade, setEspecialidade] = useState('');
+  const [crm, setCrm] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await api.post('/users/usuarios', { nome, email, senha, papel });
+      if (papel === 'medico') {
+        // Cria usuário + médico
+        await api.post('/users/medicos-completo', {
+          nome,
+          email,
+          senha,
+          especialidade,
+          crm,
+        });
+      } else {
+        // Cria usuário comum (paciente ou admin)
+        await api.post('/users/usuarios', { nome, email, senha, papel });
+      }
+
       alert('Usuário cadastrado com sucesso!');
-      navigate('/'); // redireciona para o login
+      navigate('/');
     } catch (error) {
       console.error('Erro ao cadastrar:', error);
-      alert('Erro ao cadastrar usuário');
+
+      // Tenta mostrar mensagem do backend, se houver
+      const msgErro =
+        error.response?.data?.error || error.message || 'Erro ao cadastrar usuário';
+
+      alert(msgErro);
     }
   };
 
@@ -61,6 +81,28 @@ export default function Cadastro() {
           <option value="medico">Médico</option>
           <option value="admin">Administrador</option>
         </select>
+
+        {papel === 'medico' && (
+          <>
+            <input
+              type="text"
+              placeholder="Especialidade"
+              value={especialidade}
+              onChange={(e) => setEspecialidade(e.target.value)}
+              required
+              className="border p-2 w-full rounded"
+            />
+            <input
+              type="text"
+              placeholder="CRM"
+              value={crm}
+              onChange={(e) => setCrm(e.target.value)}
+              required
+              className="border p-2 w-full rounded"
+            />
+          </>
+        )}
+
         <button type="submit" className="bg-blue-600 text-white p-2 w-full rounded">
           Cadastrar
         </button>
