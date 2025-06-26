@@ -1,14 +1,27 @@
-import React from "react";
-import Navbar from "../components/Navbar";
+import PerfilAdmin from "./PerfilAdmin";
+import PerfilPaciente from "./PerfilPaciente";
+import PerfilMedico from "./PerfilMedico";
 
-export default function Perfil() {
-  return (
-    <>
-      <Navbar />
-      <div className="pt-20 min-h-screen bg-blue-100 flex flex-col items-center justify-start p-6">
-        <h1 className="text-3xl font-bold mb-4">Página de Perfil</h1>
-        <p>Conteúdo do perfil vai aqui.</p>
-      </div>
-    </>
-  );
+export default function PgPerfil() {
+  const usuarioJSON = localStorage.getItem("usuario");
+  console.log("usuarioJSON:", usuarioJSON); // debug
+  const usuario = usuarioJSON ? JSON.parse(usuarioJSON) : null;
+  console.log("usuario objeto:", usuario);  // debug
+
+  if (!usuario) {
+    return <div>Você precisa estar logado para acessar o perfil.</div>;
+  }
+
+  console.log("Tipo do usuário:", usuario.tipo); // debug
+
+  switch (usuario.tipo) {
+    case "admin":
+      return <PerfilAdmin />;
+    case "paciente":
+      return <PerfilPaciente />;
+    case "medico":
+      return <PerfilMedico />;
+    default:
+      return <div>Tipo de usuário não reconhecido.</div>;
+  }
 }
