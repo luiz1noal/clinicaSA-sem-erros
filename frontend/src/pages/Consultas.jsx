@@ -9,8 +9,8 @@ export default function Consultas() {
 
   const [pacienteId, setPacienteId] = useState("");
   const [medicoId, setMedicoId] = useState("");
-  const [dataHora, setDataHora] = useState("");
-  const [motivo, setMotivo] = useState("");
+  const [data, setData] = useState("");
+  const [motivo, setMotivo] = useState(""); // opcional, seu backend não está usando, mas pode guardar localmente
   const [erro, setErro] = useState("");
 
   useEffect(() => {
@@ -31,7 +31,7 @@ export default function Consultas() {
 
   async function listarMedicos() {
     try {
-      const res = await api.get("/medicos");
+      const res = await api.get("/users/medicos");
       setMedicos(res.data);
     } catch (err) {
       console.error("Erro ao listar médicos:", err);
@@ -52,22 +52,22 @@ export default function Consultas() {
   async function cadastrar(e) {
     e.preventDefault();
 
-    if (!pacienteId || !medicoId || !dataHora) {
+    if (!pacienteId || !medicoId || !data) {
       alert("Preencha paciente, médico e data/hora");
       return;
     }
 
     try {
       await api.post("/consultas", {
-        paciente_id: pacienteId,
-        medico_id: medicoId,
-        data_hora: dataHora,
-        motivo: motivo || "Consulta agendada",
+        pacienteId,   // enviando no padrão do backend
+        medicoId,
+        data,         // campo "data" no backend (data + hora em ISO)
+        // motivo não está previsto no backend, pode ignorar ou adicionar se criar o campo lá
       });
 
       setPacienteId("");
       setMedicoId("");
-      setDataHora("");
+      setData("");
       setMotivo("");
       listarConsultas();
       alert("Consulta cadastrada com sucesso!");
@@ -137,20 +137,21 @@ export default function Consultas() {
           <div className="flex-1">
             <label
               className="block mb-1 font-medium text-gray-700"
-              htmlFor="dataHora"
+              htmlFor="data"
             >
               Data e Hora
             </label>
             <input
-              id="dataHora"
+              id="data"
               type="datetime-local"
               className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              value={dataHora}
-              onChange={(e) => setDataHora(e.target.value)}
+              value={data}
+              onChange={(e) => setData(e.target.value)}
               required
             />
           </div>
 
+          {/* Opcional: campo motivo se quiser */}
           <div className="flex-1">
             <label
               className="block mb-1 font-medium text-gray-700"
@@ -189,12 +190,13 @@ export default function Consultas() {
               >
                 <div>
                   <span className="font-semibold">{c.nome_paciente}</span> –{" "}
-                  {new Date(c.data_hora).toLocaleString("pt-BR")}
+                  {new Date(c.data).toLocaleString("pt-BR")}
                 </div>
                 <div className="text-gray-600 md:text-right">
                   <div>
                     Médico: <span className="font-medium">{c.nome_medico || "-"}</span>
                   </div>
+                  {/* Motivo não existe no backend, remover ou mostrar "-" */}
                   <div>Motivo: {c.motivo || "-"}</div>
                 </div>
               </li>

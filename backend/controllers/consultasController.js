@@ -49,16 +49,16 @@ async function buscarConsulta(req, res) {
   }
 }
 
-// Criar nova consulta
+// Criar nova consulta (corrigido, sem o campo 'horario')
 async function criarConsulta(req, res) {
-  console.log("Recebido no body:", req.body); // <<< AQUI
+  console.log("Recebido no body:", req.body);
 
-  const { pacienteId, data, horario, medicoId } = req.body;
+  const { pacienteId, data, medicoId } = req.body;
 
   try {
     const resultado = await db.query(
-      "INSERT INTO consultorio.consultas (paciente_id, data, horario, medico_id) VALUES ($1, $2, $3, $4) RETURNING *",
-      [pacienteId, data, horario, medicoId]
+      "INSERT INTO consultorio.consultas (paciente_id, data, medico_id) VALUES ($1, $2, $3) RETURNING *",
+      [pacienteId, data, medicoId]
     );
     res.status(201).json(resultado.rows[0]);
   } catch (err) {
@@ -111,6 +111,7 @@ async function deletarConsulta(req, res) {
   }
 }
 
+// Estatísticas (mock)
 async function obterEstatisticas(req, res) {
   try {
     const estatisticas = {
