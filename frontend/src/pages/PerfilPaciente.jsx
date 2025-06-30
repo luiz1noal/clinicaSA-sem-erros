@@ -1,4 +1,4 @@
-import Perfil from "../components/Perfil";
+import Perfil from "../components/Perfil.jsx";
 import { useState } from "react";
 
 export default function PerfilPaciente() {
@@ -17,19 +17,28 @@ export default function PerfilPaciente() {
       titulo="Perfil do Paciente"
       descricao="Aqui você pode acompanhar suas consultas e dados médicos."
     >
-      <section className="mt-8 space-y-6">
+      <section className="mt-8 space-y-8">
+        {/* Próximas Consultas */}
         <div>
-          <h3 className="text-xl font-semibold mb-3">Próximas Consultas</h3>
+          <h3 className="text-xl font-semibold mb-3 text-blue-700">
+            Próximas Consultas
+          </h3>
           {consultas.length > 0 ? (
-            <ul className="space-y-3">
+            <ul className="space-y-4">
               {consultas.map(({ id, data, medico, status }) => (
                 <li
                   key={id}
-                  className="p-4 bg-blue-50 rounded shadow flex justify-between items-center hover:bg-blue-100 transition"
+                  className="p-4 bg-blue-50 border border-blue-100 rounded-lg shadow-sm flex justify-between items-center hover:bg-blue-100 transition-colors"
                 >
                   <div>
-                    <p className="font-semibold">{medico}</p>
-                    <p className="text-sm text-gray-600">{data}</p>
+                    <p className="font-semibold text-gray-800">{medico}</p>
+                    <p className="text-sm text-gray-600">
+                      {new Date(data).toLocaleDateString("pt-BR", {
+                        day: "2-digit",
+                        month: "2-digit",
+                        year: "numeric",
+                      })}
+                    </p>
                   </div>
                   <span
                     className={`px-3 py-1 rounded-full text-sm font-semibold ${
@@ -48,18 +57,25 @@ export default function PerfilPaciente() {
           )}
         </div>
 
+        {/* Mensagens */}
         <div>
-          <h3 className="text-xl font-semibold mb-3">Mensagens</h3>
-          <ul className="bg-gray-100 p-4 rounded max-h-40 overflow-auto space-y-2 text-gray-700">
+          <h3 className="text-xl font-semibold mb-3 text-purple-700">
+            Mensagens
+          </h3>
+          <ul className="bg-gray-100 p-4 rounded-lg max-h-40 overflow-auto space-y-2 text-gray-700 border border-gray-200">
             {mensagens.map((msg, i) => (
-              <li key={i}>• {msg}</li>
+              <li key={i} className="flex items-start">
+                <span className="mr-2 text-blue-500">•</span>
+                <span>{msg}</span>
+              </li>
             ))}
           </ul>
         </div>
 
+        {/* Logout */}
         <button
           onClick={() => alert("Logout executado")}
-          className="mt-6 px-5 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition"
+          className="mt-6 px-5 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition-colors"
         >
           Sair
         </button>
